@@ -1,3 +1,4 @@
+// файл: api/freshdesk.js
 export default async function handler(req, res) {
   // Разрешаем только POST-запросы
   if (req.method !== "POST") {
@@ -5,7 +6,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Получаем данные из запроса
     const { ticket_id, description_text } = req.body || {};
 
     if (!ticket_id || !description_text) {
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
     const email = emailMatch[0];
 
-    // Отправка PUT запроса в Freshdesk
+    // Отправка PUT-запроса в Freshdesk для обновления Requester Email
     const response = await fetch(
       `https://help-dressly.freshdesk.com/api/v2/tickets/${ticket_id}`,
       {
@@ -40,6 +40,7 @@ export default async function handler(req, res) {
 
     // Успешно
     return res.status(200).json({ ok: true, email });
+
   } catch (e) {
     return res.status(500).json({ ok: false, error: e.message });
   }
